@@ -42,28 +42,40 @@ TEST(test_wordinator)
 {
     char buffer[BUFLEN] = "";
 
-    addNumber(buffer, 1);
+    wordinator(buffer, 1);
     ASSERT_STR_EQ(buffer, "one");
 
     resetBuffer(buffer);
-    addNumber(buffer, 13);
+    wordinator(buffer, 13);
     ASSERT_STR_EQ(buffer, "thirteen");
 
     resetBuffer(buffer);
-    addNumber(buffer, 20);
+    wordinator(buffer, 20);
     ASSERT_STR_EQ(buffer, "twenty");
 
     resetBuffer(buffer);
-    addNumber(buffer, 73);
+    wordinator(buffer, 73);
     ASSERT_STR_EQ(buffer, "seventythree");
 
     resetBuffer(buffer);
-    addNumber(buffer, 92);
+    wordinator(buffer, 92);
     ASSERT_STR_EQ(buffer, "ninetytwo");
 
     resetBuffer(buffer);
-    addNumber(buffer, 102);
-    ASSERT_STR_EQ(buffer, "one hundred and one");
+    wordinator(buffer, 100);
+    ASSERT_STR_EQ(buffer, "one hundred");
+
+    resetBuffer(buffer);
+    wordinator(buffer, 102);
+    ASSERT_STR_EQ(buffer, "one hundred and two");
+
+    resetBuffer(buffer);
+    wordinator(buffer, 147);
+    ASSERT_STR_EQ(buffer, "one hundred and fortyseven");
+
+    resetBuffer(buffer);
+    wordinator(buffer, 499);
+    ASSERT_STR_EQ(buffer, "four hundred and ninetynine");
 }
 
 int main()
