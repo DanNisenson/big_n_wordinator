@@ -30,23 +30,19 @@ int failed = 0;
         printf("\033[0;32mPASS: %s === %s\n\033[0m", str1, str2); \
     }
 // End of test helpers
+#define BUFLEN 1000
 
-TEST(test_add)
+TEST(test_wordinator)
 {
-    ASSERT(add(1, 2) == 3);
-    ASSERT(add(0, 0) == 0);
-    ASSERT(add(-1, -1) == -2);
-}
-
-TEST(test_string_assert)
-{
-    ASSERT_STR_EQ("hello", "hello");
+    char buffer[BUFLEN] = "";
+    addNumber(buffer, BUFLEN, 1);
+    ASSERT_STR_EQ(buffer, "one");
+    addNumber(buffer, BUFLEN, 10);
+    ASSERT_STR_EQ(buffer, "ten");
 }
 
 int main()
 {
-    // Add a `RUN_TEST` line for each test function
-    RUN_TEST(test_add);
-    RUN_TEST(test_string_assert);
+    RUN_TEST(test_wordinator);
     return failed;
 }
