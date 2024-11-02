@@ -30,15 +30,40 @@ int failed = 0;
         printf("\033[0;32mPASS: %s === %s\n\033[0m", str1, str2); \
     }
 // End of test helpers
+
 #define BUFLEN 1000
+
+void resetBuffer(char *buffer)
+{
+    buffer[0] = '\0';
+}
 
 TEST(test_wordinator)
 {
     char buffer[BUFLEN] = "";
-    addNumber(buffer, BUFLEN, 1);
+
+    addNumber(buffer, 1);
     ASSERT_STR_EQ(buffer, "one");
-    addNumber(buffer, BUFLEN, 10);
-    ASSERT_STR_EQ(buffer, "ten");
+
+    resetBuffer(buffer);
+    addNumber(buffer, 13);
+    ASSERT_STR_EQ(buffer, "thirteen");
+
+    resetBuffer(buffer);
+    addNumber(buffer, 20);
+    ASSERT_STR_EQ(buffer, "twenty");
+
+    resetBuffer(buffer);
+    addNumber(buffer, 73);
+    ASSERT_STR_EQ(buffer, "seventythree");
+
+    resetBuffer(buffer);
+    addNumber(buffer, 92);
+    ASSERT_STR_EQ(buffer, "ninetytwo");
+
+    resetBuffer(buffer);
+    addNumber(buffer, 102);
+    ASSERT_STR_EQ(buffer, "one hundred and one");
 }
 
 int main()
