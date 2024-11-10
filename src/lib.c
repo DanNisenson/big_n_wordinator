@@ -1,60 +1,73 @@
 #include <stdio.h>
+#include <math.h>
 #include <string.h>
 
-int add_units(char *buffer, int i)
+const char *units_strs[] = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+const char *teens_strs[] = {"ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
+const char *tens_strs[] = {"twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
+const char *scale_strs[] = {" thousand", " million", " billion", " trillion", " quadrillion", " quintillion"};
+
+// get amount of zeroes / 3 (1 = thousands, 2 = millions, 3 = billions, ...)
+int get_scale(double number)
 {
-    char strs[10][6] = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
-    strcat(buffer, strs[i]);
+    return (int)floor(log10(fabs(number))) / 3;
+}
+
+int format_units(char *buffer, int i)
+{
+    strcat(buffer, units_strs[i]);
     return 0;
 }
 
-int add_teens(char *buffer, int i)
+int format_teens(char *buffer, int i)
 {
-    char strs[10][10] = {"ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
-    strcat(buffer, strs[i]);
+    strcat(buffer, teens_strs[i]);
     return 0;
 }
 
-int add_tens(char *buffer, int i)
+int format_tens(char *buffer, int i)
 {
-    char strs[8][8] = {"twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
-    strcat(buffer, strs[i - 2]);
+    strcat(buffer, tens_strs[i - 2]);
     return 0;
 }
 
-int add_hundreds(char buffer[], int n)
+int format_hundreds(char buffer[], unsigned long n)
 {
-    char str[] = " hundred";
-    add_units(buffer, n / 100);
-    strcat(buffer, str);
-    if (n > 100)
+    int divided = n / 100;
+    int reminder = n % 100;
+    if (divided != 0)
     {
-        strcat(buffer, " and ");
+        format_units(buffer, divided);
+        strcat(buffer, " hundred");
+        if (reminder != 0)
+        {
+            strcat(buffer, " and ");
+        }
     }
     return 0;
 }
 
-int add_0_to_99(char *buffer, int n)
+int format_1_to_99(char *buffer, unsigned long n)
 {
     int divided = n / 10;
     int reminder = n % 10;
 
     if (divided < 1)
     {
-        add_units(buffer, n);
+        format_units(buffer, n);
         return 0;
     }
     else if (divided < 2)
     {
-        add_teens(buffer, reminder);
+        format_teens(buffer, reminder);
         return 0;
     }
     else if (divided < 10)
     {
-        add_tens(buffer, divided);
+        format_tens(buffer, divided);
         if (reminder >= 1)
         {
-            add_units(buffer, reminder);
+            format_units(buffer, reminder);
         }
         return 0;
     }
@@ -64,7 +77,53 @@ int add_0_to_99(char *buffer, int n)
     }
 }
 
-int wordinator(char *buffer, int n)
+int format_1_to_999(char *buffer, unsigned long n)
+{
+    if (n >= 1 && n <= 99)
+    {
+        format_1_to_99(buffer, n);
+        return 0;
+    }
+    else if (n <= 999)
+    {
+        format_hundreds(buffer, n);
+        format_1_to_99(buffer, n % 100);
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+// format numbers by grouping 3 digits (billions, millions, thousands, ...)
+int format_recursive(char *buffer, unsigned long n, int scale)
+{
+    unsigned long divisor = scale > 0 ? pow(1000, scale) : 1;
+    unsigned long quotient = n / divisor;
+    unsigned long reminder = n % divisor;
+
+    if (quotient > 0)
+    {
+        format_1_to_999(buffer, quotient);
+        if (scale > 0)
+        {
+            strcat(buffer, scale_strs[scale - 1]);
+            if (reminder > 0)
+            {
+                strcat(buffer, ", ");
+            }
+        }
+    }
+    if (scale > 0)
+    {
+        scale--;
+        return format_recursive(buffer, reminder, scale);
+    }
+    return 0;
+}
+
+int wordinator(char *buffer, unsigned long n)
 {
 
     if (n < 1)
@@ -72,15 +131,9 @@ int wordinator(char *buffer, int n)
         printf("Error: number must be int bigger than 0");
         return 1;
     }
-    else if (n > 0 && n < 99)
+    else if (n <= 999999999999)
     {
-        add_0_to_99(buffer, n);
-        return 0;
-    }
-    else if (n < 999)
-    {
-        add_hundreds(buffer, n);
-        add_0_to_99(buffer, n % 100);
+        format_recursive(buffer, n, get_scale(n));
         return 0;
     }
     else

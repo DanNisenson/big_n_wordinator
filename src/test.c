@@ -76,6 +76,54 @@ TEST(test_wordinator)
     resetBuffer(buffer);
     wordinator(buffer, 499);
     ASSERT_STR_EQ(buffer, "four hundred and ninetynine");
+
+    resetBuffer(buffer);
+    wordinator(buffer, 1000);
+    ASSERT_STR_EQ(buffer, "one thousand");
+
+    resetBuffer(buffer);
+    wordinator(buffer, 3333);
+    ASSERT_STR_EQ(buffer, "three thousand, three hundred and thirtythree");
+
+    resetBuffer(buffer);
+    wordinator(buffer, 6029);
+    ASSERT_STR_EQ(buffer, "six thousand, twentynine");
+
+    resetBuffer(buffer);
+    wordinator(buffer, 6209);
+    ASSERT_STR_EQ(buffer, "six thousand, two hundred and nine");
+
+    resetBuffer(buffer);
+    wordinator(buffer, 10209);
+    ASSERT_STR_EQ(buffer, "ten thousand, two hundred and nine");
+
+    resetBuffer(buffer);
+    wordinator(buffer, 102209);
+    ASSERT_STR_EQ(buffer, "one hundred and two thousand, two hundred and nine");
+
+    resetBuffer(buffer);
+    wordinator(buffer, 600209);
+    ASSERT_STR_EQ(buffer, "six hundred thousand, two hundred and nine");
+
+    resetBuffer(buffer);
+    wordinator(buffer, 1600209L);
+    ASSERT_STR_EQ(buffer, "one million, six hundred thousand, two hundred and nine");
+
+    resetBuffer(buffer);
+    wordinator(buffer, 20000209L);
+    ASSERT_STR_EQ(buffer, "twenty million, two hundred and nine");
+
+    resetBuffer(buffer);
+    wordinator(buffer, 321600209L);
+    ASSERT_STR_EQ(buffer, "three hundred and twentyone million, six hundred thousand, two hundred and nine");
+
+    resetBuffer(buffer);
+    wordinator(buffer, 1321600209L);
+    ASSERT_STR_EQ(buffer, "one billion, three hundred and twentyone million, six hundred thousand, two hundred and nine");
+
+    resetBuffer(buffer);
+    wordinator(buffer, 611321600209L);
+    ASSERT_STR_EQ(buffer, "six hundred and eleven billion, three hundred and twentyone million, six hundred thousand, two hundred and nine");
 }
 
 int main()
