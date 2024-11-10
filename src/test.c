@@ -124,6 +124,10 @@ TEST(test_wordinator)
     resetBuffer(buffer);
     wordinator(buffer, 611321600209L);
     ASSERT_STR_EQ(buffer, "six hundred and eleven billion, three hundred and twentyone million, six hundred thousand, two hundred and nine");
+
+    resetBuffer(buffer);
+    wordinator(buffer, 3123123123123123123LL);
+    ASSERT_STR_EQ(buffer, "three quintillion, one hundred and twentythree quadrillion, one hundred and twentythree trillion, one hundred and twentythree billion, one hundred and twentythree million, one hundred and twentythree thousand, one hundred and twentythree");
 }
 
 int main()

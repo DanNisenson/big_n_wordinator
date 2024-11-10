@@ -131,7 +131,7 @@ int wordinator(char *buffer, unsigned long n)
         printf("Error: number must be int bigger than 0");
         return 1;
     }
-    else if (n <= 999999999999)
+    else if (n <= 9223372036854775807)
     {
         format_recursive(buffer, n, get_scale(n));
         return 0;
